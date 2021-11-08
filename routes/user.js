@@ -62,4 +62,10 @@ router.post('/update/:id', [
     });
 });
 
+router.delete('/:id', (req, res) => {
+    var id = req.params.id;
+    User.deleteOne({ _id: id }, function (err, results) {
+    });
+    return res.json({ "status": 200, "message": "user deleted successfully" });
+});
 module.exports = router
