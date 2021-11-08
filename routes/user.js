@@ -3,7 +3,6 @@ const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require("bcrypt");
-
 // create user
 router.post('/signup', [
     body('email', 'Please enter correct email is').isEmail(),
@@ -28,7 +27,6 @@ router.post('/signup', [
     try {
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
-
         await User.create({
             name: req.body.name,
             password: secPass,
@@ -40,21 +38,28 @@ router.post('/signup', [
         res.status(500).send("some error occurred");
     }
 });
-
 router.get('/', async (req, res) => {
-    return User.find({}, {"name": true, "email": true, "date": true}).then(user => {
-        res.json({"status": 200, "message":"user list found", "data" :user});
+    return User.find({}, { "name": true, "email": true, "date": true }).then(user => {
+        res.json({ "status": 200, "message": "user list found", "data": user });
     });
 });
-
 router.get('/:id', async (req, res) => {
     var id = req.params.id;
-    return User.findOne({_id: id}, {"name": true, "email": true, "date": true}).then(user => {
-        res.json({"status": 200, "message":"user list found", "data" :user});
+    return User.findOne({ _id: id }, { "name": true, "email": true, "date": true }).then(user => {
+        res.json({ "status": 200, "message": "user list found", "data": user });
     });
 });
 
-
-
+/*update user data*/
+router.post('/update/:id', [
+    body('email', 'Please enter correct email is').isEmail(),
+    body('password', 'Please enter password with minmum 5 character').isLength({ min: 5 }),
+    body('name').isLength({ min: 5 })
+], async (req, res) => {
+    var id = req.params.id;
+    return User.updateOne({ _id: id }, { $set: { "name": req.body.name, "email": req.body.email } }).then(user => {
+        res.json({ "status": 200, "message": "data updated successfully" });
+    });
+});
 
 module.exports = router
