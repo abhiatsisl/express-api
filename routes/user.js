@@ -6,13 +6,13 @@ const bcrypt = require("bcrypt");
 // create user
 router.post('/signup', [
     body('email', 'Please enter correct email is').isEmail(),
-    body('email').custom(value => {
-        return User.findOne({ email: value }).then(user => {
-            if (user) {
-                return Promise.reject('Email id already exist');
-            }
-        });
-    }),
+    // body('email').custom(value => {
+    //     return User.findOne({ email: value }).then(user => {
+    //         if (user) {
+    //             return Promise.reject('Email id already exist');
+    //         }
+    //     });
+    // }),
     body('password', 'Please enter password with minmum 5 character').isLength({ min: 5 }),
     body('name').isLength({ min: 5 })
 ], async (req, res) => {
