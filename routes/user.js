@@ -68,4 +68,23 @@ router.delete('/:id', (req, res) => {
     });
     return res.json({ "status": 200, "message": "user deleted successfully" });
 });
+
+router.post('/login', [
+    body('email', 'Please enter correct email is').isEmail(),
+    body('password', 'Please enter password with minimum 5 character').isLength({ min: 5 })
+], async (req, res) => {
+    // console.log(req.body);
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const secPass = await bcrypt.hash(req.body.password, salt);
+        // console.log(salt);
+        return User.find({ "email": req.body.email} , { "password": secPass}, { "name": true, "email": true, "date": true }).then(user => {
+            res.json({ "status": 200, "message": "Login sucess", "data": user });
+        });
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).send("some error occurred");
+    }
+});
 module.exports = router

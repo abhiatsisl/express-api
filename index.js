@@ -10,8 +10,6 @@ app.use('/', (req, res) => {
     return res.send("Hello user");
 });
 
-// app.listen(3000);
-
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log('Express server listening on port', port)
