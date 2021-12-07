@@ -2,8 +2,9 @@ var express = require('express');
 const connectToMongo = require('./db');
 connectToMongo();
 var app = express();
-
+var cors = require('cors');
 app.use(express.json());
+app.use(cors());
 
 app.use('/users', require('./routes/user'));
 app.use('/', (req, res) => {
