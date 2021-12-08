@@ -76,11 +76,23 @@ router.post('/login', [
     // console.log(req.body);
     try {
         const salt = await bcrypt.genSalt(10);
-        const secPass = await bcrypt.hash(req.body.password, salt);
-        // console.log(salt);
-        return User.find({ "email": req.body.email} , { "password": secPass}, { "name": true, "email": true, "date": true }).then(user => {
-            res.json({ "status": 200, "message": "Login sucess", "data": user });
-        });
+        const securePass = await bcrypt.hash(req.body.password, salt);
+        // console.log(securePass);
+        const user = await User.findOne({ "email": req.body.email });
+        if (!user) return res.status(400).json({ msg: "User not exist" });
+        // .then(user => {
+        //     res.json({ "status": 200, "message": "Login sucess", "data": user });
+        // });
+        bcrypt.compare(req.body.password, user.password, (err, data) => {
+            //if error than throw error
+            if (err) throw err
+            //if both match than you can do anything
+            if (data) {
+                return res.status(200).json({ "message": "Login success", "data": { "name": user.name, "email": user.email, "date": user.date } })
+            } else {
+                return res.status(401).json({ message: "Invalid credential" })
+            }
+        })
     }
     catch (error) {
         console.error(error.message);
