@@ -9,4 +9,5 @@ const connectToMongo = () => {
     console.log('Connected successfully');
   });
 }
+//Mongo@freeTesting
 module.exports = connectToMongo;
