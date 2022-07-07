@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
 /*update user data*/
 router.post('/update/:id', [
     body('email', 'Please enter correct email is').isEmail(),
-    body('password', 'Please enter password with minmum 5 character').isLength({ min: 5 }),
+    // body('password', 'Please enter password with minmum 5 character').isLength({ min: 5 }),
     body('name').isLength({ min: 5 })
 ], async (req, res) => {
     var id = req.params.id;
