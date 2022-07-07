@@ -52,7 +52,7 @@ router.get('/:id', async (req, res) => {
 
 /*update user data*/
 router.post('/update/:id', [
-    body('email', 'Please enter correct email is').isEmail(),
+    body('email', 'Please enter correct email!').isEmail(),
     // body('password', 'Please enter password with minmum 5 character').isLength({ min: 5 }),
     body('name').isLength({ min: 5 })
 ], async (req, res) => {
@@ -88,7 +88,7 @@ router.post('/login', [
             if (err) throw err
             //if both match than you can do anything
             if (data) {
-                return res.status(200).json({ "message": "Login success", "data": { "name": user.name, "email": user.email, "date": user.date } })
+                return res.status(200).json({ "message": "Login success", "data": { "id": user._id, "name": user.name, "email": user.email, "date": user.date } })
             } else {
                 return res.status(401).json({ message: "Invalid credential" })
             }
